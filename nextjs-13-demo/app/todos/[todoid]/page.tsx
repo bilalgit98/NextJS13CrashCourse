@@ -1,5 +1,6 @@
 import React from 'react'
 import { Todo } from '../../../typings'
+import todos from '../page'
 
 
 type pageProps = {
@@ -10,14 +11,14 @@ type pageProps = {
 }
 
 const fetchTodo= async (todoid: string ) =>{
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${todoid}`);
-    const todo= await response.json();
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${todoid}`,{next : {revalidate:60}});
+    const todo = await response.json();
     return todo
 }
 
 
 async function TodoPage({params : {todoid}} : pageProps) {
-    const todo : Todo = await fetchTodo(todoid)
+    const todo : Todo  = await fetchTodo(todoid)
 
 
   return (
@@ -32,3 +33,17 @@ async function TodoPage({params : {todoid}} : pageProps) {
 }
 
 export default TodoPage
+
+export async function generateStaticParams() {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+    const todos: Todo[] = await response.json();
+
+    const trimmedTodos = todos.splice(0,10)
+
+return trimmedTodos.map((todo) => ({
+    todoid : todo.id.toString(),
+}))
+
+
+    }
+
