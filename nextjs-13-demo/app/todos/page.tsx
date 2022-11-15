@@ -4,8 +4,7 @@ import ToDosList from './ToDosList'
 function todos() {
   return(
   <div>
-    {/* @ts-ignore*/}
-    <ToDosList />
+ <h1> this is where the To-Do's will be displayed!</h1> 
   </div>
   )
 
